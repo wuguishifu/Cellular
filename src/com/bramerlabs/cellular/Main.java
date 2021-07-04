@@ -35,8 +35,12 @@ public class Main {
     public void init() {
 
         cells = new ArrayList<>();
-        cells.add(new Cell(new Vector2f(100, 100)));
-        cells.add(new Cell(new Vector2f(150, 150)));
+        for (int i = 0; i < 500; i++) {
+            cells.add(new Cell(new Vector2f((float) (Math.random() * windowSize.width),
+                    (float) (Math.random() * windowSize.height)), (int) (Math.random()*2 + 1)));
+        }
+//        cells.add(new Cell(new Vector2f(500, 500), 2));
+//        cells.add(new Cell(new Vector2f(550, 500), 2));
 
         KeyListener keyListener = new KeyListener() {
             public void keyTyped(KeyEvent keyEvent) {}
@@ -52,7 +56,7 @@ public class Main {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-                    cells.add(new Cell(new Vector2f(mouseEvent.getX(), mouseEvent.getY())));
+                    cells.add(new Cell(new Vector2f(mouseEvent.getX(), mouseEvent.getY()), 1));
                 }
             }
             public void mousePressed(MouseEvent mouseEvent) {}
@@ -76,9 +80,11 @@ public class Main {
             }
         };
         panel.addMouseListener(mouseListener);
+        panel.setPreferredSize(windowSize);
 
         frame.addKeyListener(keyListener);
         frame.add(panel);
+        frame.pack();
         frame.setVisible(true);
 
         run();
