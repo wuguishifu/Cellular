@@ -3,7 +3,6 @@ package com.bramerlabs.cellular;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public class Main {
 
@@ -12,35 +11,32 @@ public class Main {
     private JFrame frame;
     private JPanel panel;
 
-    private boolean run = true;
+    private Universe universe;
 
-    private ArrayList<Cell> cells;
+    private boolean run = true;
 
     public static void main(String[] args0) {
         new Main().init();
     }
 
     public void paint(Graphics g) {
-        for (Cell cell : cells) {
-            cell.paint(g);
-        }
+        universe.paint(g);
     }
 
     public void update() {
-        for (Cell cell : cells) {
-            cell.update(cells);
+        for (int i = 0; i < 10; i++) {
+            universe.step();
         }
     }
 
     public void init() {
-
-        cells = new ArrayList<>();
-        for (int i = 0; i < 500; i++) {
-            cells.add(new Cell(new Vector2f((float) (Math.random() * windowSize.width),
-                    (float) (Math.random() * windowSize.height)), (int) (Math.random()*2 + 1)));
-        }
-//        cells.add(new Cell(new Vector2f(500, 500), 2));
-//        cells.add(new Cell(new Vector2f(550, 500), 2));
+        universe = new Universe(6, 400, windowSize.width, windowSize.height);
+        universe.reseed(0.02f, 0.04f, 0.0f,30.0f,
+                30.0f, 100.0f, 0.01f, false);
+        universe.setRandomTypes();
+        universe.setRandomParticles();
+        universe.wrap = true;
+        universe.flatForce = true;
 
         KeyListener keyListener = new KeyListener() {
             public void keyTyped(KeyEvent keyEvent) {}
@@ -54,11 +50,7 @@ public class Main {
 
         MouseListener mouseListener = new MouseListener() {
             @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-                    cells.add(new Cell(new Vector2f(mouseEvent.getX(), mouseEvent.getY()), 1));
-                }
-            }
+            public void mouseClicked(MouseEvent mouseEvent) {}
             public void mousePressed(MouseEvent mouseEvent) {}
             public void mouseReleased(MouseEvent mouseEvent) {}
             public void mouseEntered(MouseEvent mouseEvent) {}
